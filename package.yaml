@@ -4,11 +4,12 @@ dependencies:
 - base
 - text
 - bytestring
+- strings
+- directory
 - aeson
 - http-client
 - http-conduit
 - mtl
-- free
 - shelly
 - webdriver
 - hspec
