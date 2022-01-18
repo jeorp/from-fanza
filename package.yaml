@@ -6,6 +6,7 @@ dependencies:
 - bytestring
 - aeson
 - mtl
+- free
 - shelly
 - webdriver
 - hspec
