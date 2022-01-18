@@ -4,7 +4,9 @@ dependencies:
 - base
 - text
 - bytestring
+- aeson
 - mtl
+- shelly
 - webdriver
 - hspec
 
