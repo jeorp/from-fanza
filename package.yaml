@@ -5,6 +5,8 @@ dependencies:
 - text
 - bytestring
 - aeson
+- http-client
+- http-conduit
 - mtl
 - free
 - shelly

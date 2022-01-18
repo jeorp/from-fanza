@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Network.HTTP.Fanza.Sample where
+module Test.WebDriver.Fanza.Simple where
 
 import Test.WebDriver
 import Control.Monad.IO.Class
@@ -23,7 +23,7 @@ entryFanza = do
  noren <- findElem (ByCSS "a[class='ageCheck__link ageCheck__link--r18']")
  click noren 
 
-extractSampleMovieUrl :: String -> WD ()
+extractSampleMovieUrl :: String -> WD T.Text
 extractSampleMovieUrl url = do
   openPage url
   setImplicitWait 1000
@@ -40,17 +40,27 @@ extractSampleMovieUrl url = do
   mediaElem <- findElem $ ByXPath "//video"
   url_ <- attr mediaElem "src"
   let resultUrl = fromMaybe "" url_ 
-  liftIO $ print resultUrl
+  return resultUrl
 
-extractSamplePictures :: String -> WD [T.Text]
-extractSamplePictures url = undefined
+extractSamplePictureSmall :: String -> WD [T.Text]
+extractSamplePictureSmall url = do
+  openPage url
+  imageElems <- findElems (ByXPath "/html/body/table/tbody/tr/td[2]/div/table/tbody/tr/td[1]/div[6]/a/img")
+  catMaybes <$> traverse (flip attr "src") imageElems
+
+getBig :: T.Text -> T.Text
+getBig small = undefined
+
+rankUrl = "https://www.dmm.co.jp/digital/videoa/-/list/=/device=video/sort=ranking/trans_type=st/"
+
+extractUrls :: String -> WD [T.Text]
+extractUrls url = do
+  openPage url
+  xs <- findElems (ByXPath "/html/body/table/tbody/tr/td[2]/div[1]/div/div[3]/div/ul/li/div/p[2]/a")
+  catMaybes <$> traverse (flip attr "href") xs 
 
 
 screenshotWriteFile::  FilePath -> WD ()
 screenshotWriteFile name = do
   string <- screenshot
   liftIO . B.writeFile name  $ string
-
-
-
-
