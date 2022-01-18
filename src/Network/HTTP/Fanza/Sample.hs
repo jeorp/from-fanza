@@ -37,9 +37,20 @@ extractSampleMovieUrl url = do
   playerUrl <- attr mediaElem "src"
   let frameDocument = fromMaybe "" playerUrl
   openPage $ T.unpack frameDocument
-  mediaElem <- findElem $ ByXPath "/html/body/div[1]/div/div/section/main/video"
+  mediaElem <- findElem $ ByXPath "//video"
   url_ <- attr mediaElem "src"
   let resultUrl = fromMaybe "" url_ 
   liftIO $ print resultUrl
+
+extractSamplePictures :: String -> WD [T.Text]
+extractSamplePictures url = undefined
+
+
+screenshotWriteFile::  FilePath -> WD ()
+screenshotWriteFile name = do
+  string <- screenshot
+  liftIO . B.writeFile name  $ string
+
+
 
 
