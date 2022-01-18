@@ -23,6 +23,8 @@ entryFanza = do
  noren <- findElem (ByCSS "a[class='ageCheck__link ageCheck__link--r18']")
  click noren 
 
+sampleUrl = "https://www.dmm.co.jp/digital/videoa/-/detail/=/cid=meyd00736/?dmmref=videoa_top_pickup_pc&i3_ref=recommend&i3_ord=4"
+
 extractSampleMovieUrl :: String -> WD T.Text
 extractSampleMovieUrl url = do
   openPage url
@@ -48,8 +50,9 @@ extractSamplePictureSmall url = do
   imageElems <- findElems (ByXPath "/html/body/table/tbody/tr/td[2]/div/table/tbody/tr/td[1]/div[6]/a/img")
   catMaybes <$> traverse (flip attr "src") imageElems
 
-getBig :: T.Text -> T.Text
-getBig small = undefined
+-- convert : https://....../aaaa00111-1.jpg -> https://....../aaaa000111jp-1.jpg 
+getOriginalUrl :: T.Text -> T.Text
+getOriginalUrl small = undefined
 
 rankUrl = "https://www.dmm.co.jp/digital/videoa/-/list/=/device=video/sort=ranking/trans_type=st/"
 
