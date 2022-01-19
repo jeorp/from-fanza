@@ -27,6 +27,9 @@ setPageLoadTimeoutA n = Kleisli $ const $ setPageLoadTimeout n
 findElemA :: Selector -> WDA a Element
 findElemA selector = Kleisli $ const $ findElem selector
 
+findElemsA :: Selector -> WDA a [Element]
+findElemsA selector = Kleisli $ const $ findElems selector
+
 clickA :: WDA Element ()
 clickA = Kleisli click
 
@@ -37,17 +40,17 @@ executeJSA :: (Foldable f, FromJSON b) =>
   f JSArg -> WDA T.Text b
 executeJSA jsa = Kleisli $ executeJS jsa
 
-fanzaUrl = "https://www.dmm.co.jp/top/"
+fanzaUrlA = "https://www.dmm.co.jp/top/"
 
-entryFanza :: WDA String ()
-entryFanza = do
+entryFanzaA :: WDA String ()
+entryFanzaA = do
   openPageA
   >>> setImplicitWaitA 2000
   >>> findElemA (ByCSS "a[class='ageCheck__link ageCheck__link--r18']") 
   >>> clickA
 
-extractSampleMovieUrl :: WDA String T.Text
-extractSampleMovieUrl = do
+extractSampleMovieUrlA :: WDA String T.Text
+extractSampleMovieUrlA = do
   openPageA
   >>> setImplicitWaitA 1000
   >>> findElemA (ByXPath "//*[@id='detail-sample-movie']/div/a")
@@ -62,3 +65,18 @@ extractSampleMovieUrl = do
   >>> findElemA (ByXPath "//video")
   >>> attrA "src"
   >>> arr (fromMaybe "")
+
+extractSamplePictureSmallA :: WDA String [T.Text]
+extractSamplePictureSmallA = do
+  openPageA
+  >>> findElemsA (ByXPath "/html/body/table/tbody/tr/td[2]/div/table/tbody/tr/td[1]/div[6]/a/img")
+  >>> Kleisli (fmap catMaybes . traverse (flip attr "src"))
+
+
+-- use extract urls from ranking ect.. 
+extractUrlsA :: WDA String [T.Text]
+extractUrlsA = do
+  openPageA
+  >>> findElemsA (ByXPath "/html/body/table/tbody/tr/td[2]/div[1]/div/div[3]/div/ul/li/div/p[2]/a")
+  >>> Kleisli (fmap catMaybes . traverse (flip attr "href"))
+  
