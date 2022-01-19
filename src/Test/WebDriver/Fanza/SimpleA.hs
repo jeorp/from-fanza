@@ -1,7 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Test.WebDriver.Fanza.Arrow where
+module Test.WebDriver.Fanza.SimpleA where
 
 import Test.WebDriver
+import Test.WebDriver.Arrow
 import Control.Category ((>>>))
 import Control.Arrow
 import Control.Monad.IO.Class
@@ -10,35 +11,7 @@ import Data.Maybe
 import qualified Data.Text as T
 import qualified Data.ByteString.Lazy.Char8 as B
 
-type WDA a b = Kleisli WD a b 
 
-runNewWDA :: WDA a b -> a -> IO b
-runNewWDA wda = runSession defaultConfig . runKleisli wda
-
-openPageA :: WDA String ()
-openPageA = Kleisli openPage
-
-setImplicitWaitA :: Integer -> WDA a ()
-setImplicitWaitA n = Kleisli $ const $ setImplicitWait n
-
-setPageLoadTimeoutA :: Integer -> WDA a ()
-setPageLoadTimeoutA n = Kleisli $ const $ setPageLoadTimeout n
-
-findElemA :: Selector -> WDA a Element
-findElemA selector = Kleisli $ const $ findElem selector
-
-findElemsA :: Selector -> WDA a [Element]
-findElemsA selector = Kleisli $ const $ findElems selector
-
-clickA :: WDA Element ()
-clickA = Kleisli click
-
-attrA :: T.Text -> WDA Element (Maybe T.Text)
-attrA text = Kleisli $ flip attr text
-
-executeJSA :: (Foldable f, FromJSON b) =>
-  f JSArg -> WDA T.Text b
-executeJSA jsa = Kleisli $ executeJS jsa
 
 fanzaUrlA = "https://www.dmm.co.jp/top/"
 

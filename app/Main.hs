@@ -1,7 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 import Utility.Donwload
-import Test.WebDriver.Fanza.Arrow
+import Test.WebDriver.Arrow
+import Test.WebDriver.Fanza.SimpleA
 import Test.WebDriver
 import Control.Category ((>>>))
 import Control.Arrow
@@ -13,9 +14,9 @@ sampleUrl = "https://www.dmm.co.jp/digital/videoa/-/detail/=/cid=mide00872/?dmmr
 
 main :: IO ()
 main = do 
-  flip runNewWDA fanzaUrlA $
-    entryFanzaA
-    >>> arr (const sampleUrl)
+  flip runNewWDA fanzaUrlA $ -- runNewWDA :: Kleisli WD a b -> a -> IO b
+    entryFanzaA   -- fist, you should enter r-18 area.
+    >>> arr (const sampleUrl) -- latter, you can get sample movie url . 
     >>> extractSampleMovieUrlA
   >>= (storeFromUrl storeDir . T.unpack)
 
