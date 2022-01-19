@@ -46,7 +46,7 @@ extractSamplePictureSmallA = do
   >>> Kleisli (fmap catMaybes . traverse (flip attr "src"))
 
 
--- use extract urls from ranking ect.. 
+-- use extract urls from ranking .. 
 extractUrlsA :: WDA String [T.Text]
 extractUrlsA = do
   openPageA

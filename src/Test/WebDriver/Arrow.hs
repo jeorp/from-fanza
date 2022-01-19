@@ -87,12 +87,115 @@ getTextA = Kleisli getText
 sendKeysA :: T.Text -> WDA Element () 
 sendKeysA text = Kleisli $ sendKeys text
 
+sendRawkeysA :: T.Text -> WDA a () 
+sendRawkeysA text = Kleisli $ const $ sendRawKeys text
 
-
+clearInputA :: WDA Element () 
+clearInputA = Kleisli clearInput
 
 attrA :: T.Text -> WDA Element (Maybe T.Text)
 attrA text = Kleisli $ flip attr text
 
+cssPropA :: T.Text -> WDA Element (Maybe T.Text) 
+cssPropA = Kleisli . flip cssProp
+
+elemPosA :: WDA Element (Float, Float) 
+elemPosA = Kleisli elemPos
+
+elemSizeA :: WDA Element (Float, Float) 
+elemSizeA = Kleisli elemSize
+
+isSelectedA :: WDA Element Bool
+isSelectedA = Kleisli isSelected
+
+isEnabledA :: WDA Element Bool
+isEnabledA = Kleisli isEnabled
+
+isDisplayedA :: WDA Element Bool
+isDisplayedA = Kleisli isDisplayed
+
+tagNameA :: WDA Element T.Text
+tagNameA = Kleisli tagName
+
+activeElemA :: WDA a Element
+activeElemA = Kleisli $ const activeElem
+
+
 executeJSA :: (Foldable f, FromJSON b) =>
   f JSArg -> WDA T.Text b
 executeJSA jsa = Kleisli $ executeJS jsa
+
+asyncJSA :: (Foldable f, FromJSON b) =>
+  f JSArg -> WDA T.Text (Maybe b)
+asyncJSA jsa = Kleisli $ asyncJS jsa
+
+getCurrentWindowA :: WDA a WindowHandle
+getCurrentWindowA = Kleisli $ const getCurrentWindow
+
+closeWindowA :: WDA WindowHandle ()
+closeWindowA = Kleisli closeWindow
+
+windowsA :: WDA a [WindowHandle]
+windowsA = Kleisli $ const windows
+
+focusWindowA :: WDA WindowHandle ()
+focusWindowA = Kleisli focusWindow
+
+maximizeA :: WDA a () 
+maximizeA = Kleisli $ const maximize
+
+getWindowSizeA :: WDA a (Word, Word)
+getWindowSizeA = Kleisli $ const getWindowSize
+
+setWindowSizeA :: WDA (Word, Word) ()
+setWindowSizeA = Kleisli setWindowSize
+
+setWindowSizeA_ :: (Word, Word) -> WDA a ()
+setWindowSizeA_ = Kleisli . const . setWindowSize
+
+getWindowPosA :: WDA a (Int, Int)
+getWindowPosA = Kleisli $ const getWindowPos
+
+setWindowPosA_ :: (Int, Int) -> WDA a () 
+setWindowPosA_ = Kleisli . const . setWindowPos
+
+focusFrameA :: WDA FrameSelector ()
+focusFrameA = Kleisli focusFrame
+
+cookiesA :: WDA a [Cookie]
+cookiesA = Kleisli $ const cookies
+
+moveToA :: WDA (Int, Int) ()
+moveToA = Kleisli moveTo
+
+moveToA_ :: (Int, Int) -> WDA a ()
+moveToA_ = Kleisli . const . moveTo
+
+moveToCenterA :: WDA Element () 
+moveToCenterA = Kleisli moveToCenter
+
+moveToFromA :: (Int, Int) -> WDA Element ()
+moveToFromA = Kleisli . moveToFrom
+
+clickWithA :: WDA MouseButton ()
+clickWithA = Kleisli clickWith
+
+
+mouseDownA :: WDA a () 
+mouseDownA = Kleisli $ const mouseDown
+
+mouseUpA :: WDA a () 
+mouseUpA = Kleisli $ const mouseUp
+
+doubleClickA :: WDA a ()
+doubleClickA = Kleisli $ const doubleClick
+
+storageSizeA :: WDA WebStorageType Integer
+storageSizeA = Kleisli storageSize
+
+storageSizeA_ :: WebStorageType -> WDA a Integer
+storageSizeA_ = Kleisli . const . storageSize
+
+uploadFileA :: FilePath -> WDA a ()
+uploadFileA = Kleisli . const . uploadFile
+

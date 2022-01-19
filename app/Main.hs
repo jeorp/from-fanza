@@ -8,7 +8,7 @@ import Control.Category ((>>>))
 import Control.Arrow
 import qualified Data.Text as T
 
-storeDir = "temp"
+storeDir = "temp/"
 
 sampleUrl = "https://www.dmm.co.jp/digital/videoa/-/detail/=/cid=mide00872/?dmmref=recommend13_top_2d&i3_ref=recommend&i3_ord=4"
 

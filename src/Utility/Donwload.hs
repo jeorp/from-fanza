@@ -10,22 +10,21 @@ import System.Directory
 import Data.Strings
 
 -- input url and path 
-downloadVideo :: String -> String -> IO ()
-downloadVideo url path = do
-  let outFile = path
-  b <- doesFileExist outFile
+downloadContent :: String -> String -> IO ()
+downloadContent url path = do
+  putStrLn $ "status : Downloading to " ++ path
+  b <- doesFileExist path
   unless b $ do
     res <- httpBS $ parseRequest_ url
     let xs = getResponseHeader "Content-Type" res
         file = getResponseBody res
         contentType = if not (null xs) then head xs else ""
-    store outFile file contentType
+    store path file contentType
   where
     store :: FilePath -> B.ByteString -> B.ByteString -> IO ()
     store path bs c = do
-      if B.isInfixOf "video/" c 
+      if B.isInfixOf "video/" c || B.isInfixOf "image/" c
         then do 
-          putStrLn $ "status : Downloading to " ++ path
           let picType = BS.unpack $ snd $ B.splitAt (B.length "image/") c
               local = path
           fin <- openBinaryFile local WriteMode
@@ -48,4 +47,4 @@ eliminate s =
     in ls
 
 storeFromUrl :: String -> String -> IO ()
-storeFromUrl tmp url = downloadVideo url (tmp <> urlToFileName url)
+storeFromUrl tmp url = downloadContent url (tmp <> urlToFileName url)
