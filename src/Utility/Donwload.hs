@@ -10,8 +10,8 @@ import System.Directory
 import Data.Strings
 
 -- input url and path 
-downloadPic :: String -> String -> IO ()
-downloadPic url path = do
+downloadVideo :: String -> String -> IO ()
+downloadVideo url path = do
   let outFile = path
   b <- doesFileExist outFile
   unless b $ do
@@ -23,14 +23,16 @@ downloadPic url path = do
   where
     store :: FilePath -> B.ByteString -> B.ByteString -> IO ()
     store path bs c = do
-      if B.isInfixOf "image/" c 
+      if B.isInfixOf "video/" c 
         then do 
+          putStrLn $ "status : Downloading to " ++ path
           let picType = BS.unpack $ snd $ B.splitAt (B.length "image/") c
               local = path
           fin <- openBinaryFile local WriteMode
           hPutStr fin (BS.unpack bs)
           hClose fin
-        else putStrLn "not picture file"
+          putStrLn $ "status : Success download to " ++ path
+        else putStrLn "not video file"
 
 
 urlToFileName :: String -> String
@@ -46,4 +48,4 @@ eliminate s =
     in ls
 
 storeFromUrl :: String -> String -> IO ()
-storeFromUrl tmp url = downloadPic url (tmp <> urlToFileName url)
+storeFromUrl tmp url = downloadVideo url (tmp <> urlToFileName url)
