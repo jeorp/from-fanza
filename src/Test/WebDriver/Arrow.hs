@@ -1,4 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE Arrows #-}
 module Test.WebDriver.Arrow where
 
 import Test.WebDriver
@@ -14,6 +15,9 @@ type WDA a b = Kleisli WD a b
 
 runNewWDA :: WDA a b -> a -> IO b
 runNewWDA wda = runSession defaultConfig . runKleisli wda
+
+pathA :: b -> WDA a b
+pathA = arr . const   
 
 openPageA :: WDA String ()
 openPageA = Kleisli openPage

@@ -1,4 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE Arrows #-}
 module Test.WebDriver.Fanza.SimpleA where
 
 import Test.WebDriver
