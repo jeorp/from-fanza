@@ -26,8 +26,7 @@ downloadContent url path = do
       if B.isInfixOf "video/" c || B.isInfixOf "image/" c
         then do 
           let picType = BS.unpack $ snd $ B.splitAt (B.length "image/") c
-              local = path
-          fin <- openBinaryFile local WriteMode
+          fin <- openBinaryFile path WriteMode
           hPutStr fin (BS.unpack bs)
           hClose fin
           putStrLn $ "status : Success download to " ++ path

@@ -14,7 +14,7 @@ import qualified Data.ByteString.Lazy.Char8 as B
 type WDA a b = Kleisli WD a b 
 
 runNewWDA :: WDA a b -> a -> IO b
-runNewWDA wda = runSession defaultConfig . runKleisli wda
+runNewWDA wda = runSession defaultConfig . finallyClose . runKleisli wda
 
 pathA :: b -> WDA a b
 pathA = arr . const   
