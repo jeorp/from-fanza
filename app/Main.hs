@@ -3,7 +3,8 @@
 import Utility.Donwload
 import Test.WebDriver.Arrow
 import Test.WebDriver.Fanza.SimpleA
-import Test.WebDriver
+import Control.Exception.Arrow
+import Test.WebDriver.Fanza.ErrorHandleA
 import Control.Category ((>>>))
 import Control.Arrow
 import qualified Data.Text as T

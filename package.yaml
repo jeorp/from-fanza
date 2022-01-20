@@ -6,6 +6,7 @@ dependencies:
 - bytestring
 - strings
 - directory
+- exceptions
 - aeson
 - http-client
 - http-conduit
